@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        window.addEventListener("DOMContentLoaded",onLoad)
+        window.addEventListener("popstate",onPopstate)
+        let routerView = null;
+        let linkList = null;
+        function onLoad() {
+            routerView = document.getElementById('routeView');
+            onPopstate();
+            linkList = document.querySelectorAll('a[href]');
+            linkList.forEach(el => {
+                el.addEventListener('click',evt => {
+                    evt.preventDefault();
+                    history.pushState(null,'',el.getAttribute('href'))
+                    onPopstate()    // 注意：调用history.pushState()或history.replaceState()不会触发popstate事件。只有在做出浏览器动作时，才会触发该事件，如用户点击浏览器的回退按钮
+                                    //所以在此手动调用
+                })
+            })
+        }
+        function onPopstate() {
+            switch (location.pathname) {
+                case '/home':
+                    routerView.innerHTML = 'home';
+                    return
+                case '/about':
+                    routerView.innerHTML = 'about';
+                    return;
+            }
+        }
+    </script>
+</head>
+<body>
+<li><a href="/home">home</a></li>
+<li><a href="/about">about</a></li>
+
+<div id="routeView">
+
+</div>
+
+
+</body>
+</html>
